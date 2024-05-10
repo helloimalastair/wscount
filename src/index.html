@@ -7,7 +7,7 @@
 		<h1>Messages Sent:</h1>
 		<div id="sent"></div>
 		<h1>Messages Received:</h1>
-		<div id="received"></div>
+		<div id="received">Sending...</div>
 		<script>
 			// http-url:https://unpkg.com/nanoid@5.0.7/url-alphabet/index.js
 			var urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
@@ -25,7 +25,7 @@
 			// /input.ts
 			var sent = document.getElementById("sent");
 			var received = document.getElementById("received");
-			var numberOfMessages = Math.round(crypto.getRandomValues(new Uint16Array(1))[0] / 20);
+			var numberOfMessages = Math.round(crypto.getRandomValues(new Uint16Array(1))[0] % 2000 + 1000);
 			sent.innerText = numberOfMessages;
 			var url = new URL(window.location.href);
 			url.protocol = "ws:";
