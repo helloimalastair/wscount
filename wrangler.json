@@ -1,0 +1,15 @@
+{
+	"name": "ws-do",
+	"main": "src/index.ts",
+	"compatibility_date": "2024-05-10",
+	"durable_objects": {
+		"bindings": [{
+			"name": "DO",
+			"class_name": "DO"
+		}]
+	},
+	"migrations": [{
+		"tag": "v1",
+		"new_classes": ["DO"]
+	}]
+}

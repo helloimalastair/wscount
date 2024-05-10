@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="icon" href="data:;base64,=">
+	</head>
+	<body>
+		<h1>Messages Sent:</h1>
+		<div id="sent"></div>
+		<h1>Messages Received:</h1>
+		<div id="received"></div>
+		<script>
+			// http-url:https://unpkg.com/nanoid@5.0.7/url-alphabet/index.js
+			var urlAlphabet = "useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict";
+
+			// http-url:https://unpkg.com/nanoid@5.0.7/index.browser.js
+			var nanoid = (size = 21) => {
+				let id = "";
+				let bytes = crypto.getRandomValues(new Uint8Array(size));
+				while (size--) {
+					id += urlAlphabet[bytes[size] & 63];
+				}
+				return id;
+			};
+
+			// /input.ts
+			var sent = document.getElementById("sent");
+			var received = document.getElementById("received");
+			var numberOfMessages = Math.round(crypto.getRandomValues(new Uint16Array(1))[0] / 20);
+			sent.innerText = numberOfMessages;
+			var url = new URL(window.location.href);
+			url.protocol = "ws:";
+			url.pathname = "/ws";
+			var webSocket = new WebSocket(url);
+			var doId = new Promise((res) => {
+				webSocket.onmessage = ({ data }) => res(data);
+			});
+			webSocket.onopen = () => {
+				for (let i = 0; i < numberOfMessages; i++) {
+					webSocket.send(nanoid());
+				}
+				received.innerText = "Counting...";
+				doId.then((id) => fetch("/count/" + id).then((res) => res.json().then((body) => {
+					console.log(body);
+					received.innerText = body.counter;
+				})));
+			};
+		</script>
+	</body>
+</html>
